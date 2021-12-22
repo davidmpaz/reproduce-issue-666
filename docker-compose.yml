@@ -1,23 +1,18 @@
-version: '3.3'
+version: '3.5'
 services:
   tomcat:
-    image: tomcat:8.5.45-jdk8-adoptopenjdk-hotspot
+    build: ./tomcat-jmx
     environment:
       JAVA_OPTS: "${JAVA_OPTS} -Dcom.sun.management.jmxremote.authenticate=false \
         -Dcom.sun.management.jmxremote.ssl=false \
         -Dcom.sun.management.jmxremote.port=1099 \
         -Dcom.sun.management.jmxremote.rmi.port=1099 \
-        -Djava.rmi.server.hostname=tomcat
+        -Djava.rmi.server.hostname=tomcat \
+        -javaagent:/opt/jmx_prometheus_javaagent.jar=5566:/etc/jmx-config.yml
       "
     ports:
       - "8888:8080"
       - "1099:1099"
-  jmx:
-    image: bitnami/jmx-exporter:0.16.1
-    command:
-      - "5566"
-      - "/etc/jmx-config.yml"
-    ports:
       - "5566:5566"
     volumes:
       - ./jmx-config.yml:/etc/jmx-config.yml
