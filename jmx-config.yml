@@ -1,0 +1,7 @@
+---
+hostPort: tomcat:1099
+username:
+password:
+
+rules:
+  - pattern: ".*"
